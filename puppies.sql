@@ -13,3 +13,11 @@ CREATE TABLE pups (
 
 INSERT INTO puts (name, breed, age, sex)
   VALUES ('Tyler', 'Retriever', 3, 'M');
+
+  CREATE TABLE pups (
+    ID SERIAL PRIMARY KEY,
+    name VARCHAR,
+    breed VARCHAR,
+    age INTEGER,
+    sex VARCHAR
+  );
