@@ -38,7 +38,6 @@ const getSinglePuppy = (req, res, next) => {
 
 const createPuppy = (req, res, next) => {
   req.body.age = parseInt(req.body.age); // only part of body that isn't a string
-  console.log(req.body);
   db.none('INSERT INTO pups(name, breed, age, sex) ' +
           'VALUES (${name}, ${breed}, $<age>, $[sex])', req.body)
     .then(() => {
@@ -54,7 +53,6 @@ const createPuppy = (req, res, next) => {
 }
 
 const updatePuppy = (req, res, next) => {
-  console.log(req.body);
   const { name, breed, sex, age } = req.body;
   const id = parseInt(req.params.id);
   console.log(id);
@@ -73,10 +71,26 @@ const updatePuppy = (req, res, next) => {
     });
 }
 
+const removePuppy = (req, res, next) => {
+  const id = parseInt(req.params.id);
+  db.result('DELETE FROM pups WHERE id=$1', id)
+    .then((result) => {
+      res.status(200)
+        .json({
+          status: 'Success',
+          message: `Removed ${result.rowCount} puppy`
+        })
+      console.log(result);
+    })
+    .catch((err) => {
+      return next(err);
+    })
+}
+
 module.exports = {
   getAllPuppies: getAllPuppies,
   getSinglePuppy: getSinglePuppy,
   createPuppy: createPuppy,
   updatePuppy: updatePuppy,
-  // removePuppy: removePuppy
+  removePuppy: removePuppy
 };
