@@ -20,9 +20,25 @@ const getAllPuppies = (req, res, next) => {
     });
 };
 
+const getSinglePuppy = (req, res, next) => {
+  const pupId = parseInt(req.params.id)
+  db.one('SELECT * FROM pups WHERE id = $1', pupId)
+    .then((data) => {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved single puppy'
+        });
+    })
+    .catch((err) => {
+      return next(err);
+    });
+}
+
 module.exports = {
-  getAllPuppies: getAllPuppies
-  // getSinglePuppy: getSinglePuppy,
+  getAllPuppies: getAllPuppies,
+  getSinglePuppy: getSinglePuppy,
   // createPuppy: createPuppy,
   // updatePuppy: updatePuppy,
   // removePuppy: removePuppy
